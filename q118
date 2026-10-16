@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <string.h>
+int main() {
+    char s[1000];
+    fgets(s, sizeof(s), stdin);
+    s[strcspn(s, "\n")] = '\0';
+    int len = strlen(s);
+    int max_len = 0;
+    int start = 0;
+    int last_seen[256];
+    for (int i = 0; i < 256; i++) {
+        last_seen[i] = -1;
+    }
+    for (int end = 0; end < len; end++) {
+        char current_char = s[end];
+        if (last_seen[(unsigned char)current_char] >= start) {
+            start = last_seen[(unsigned char)current_char] + 1;
+        }
+        last_seen[(unsigned char)current_char] = end;
+        int current_len = end - start + 1;
+        if (current_len > max_len) {
+            max_len = current_len;
+        }
+    }
+    printf("%d\n", max_len);
+    return 0;
+}
